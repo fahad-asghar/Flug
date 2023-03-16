@@ -1,108 +1,42 @@
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainController : MonoBehaviour
 {
     [SerializeField] private RectTransform mainFader;
-    [SerializeField] private RectTransform userSidebar;
-    [SerializeField] private RectTransform loginPanel;
-    [SerializeField] private RectTransform registerPanel;
-    [SerializeField] private RectTransform userPanel;
-    [SerializeField] private RectTransform menuButton;
+    [SerializeField] private GameObject loadingPanel;
+    [SerializeField] private TextMeshProUGUI loadingText;
 
-    private bool userPanelOpened = false;
+    public GameObject activePanel;
+
+    public static MainController instance;
+
+    private void Awake() => instance = this;
 
     private void Start()
     {
-        mainFader.GetComponent<Image>().DOFade(0, 0.5f).OnComplete(delegate(){
+        activePanel.SetActive(true);
+        activePanel.GetComponent<Animator>().Play("PanelOpen", -1, 0);
+        SetPanelInFront(activePanel);
+
+        mainFader.GetComponent<Image>().DOFade(0, 1f).OnComplete(delegate(){
             mainFader.gameObject.SetActive(false);
         });
     }
 
-    public void MenuButton_OnClick()
+    public void OpenLoadingPanel(string text)
     {
-        ButtonClickSound();
-
-        if(!userPanelOpened)
-        {
-            menuButton.GetComponent<Animator>().Play("In", -1, 0);
-            userSidebar.GetComponent<CanvasGroup>().DOFade(0, 0).OnComplete(delegate(){
-                userSidebar.GetComponent<CanvasGroup>().DOFade(1, 0.2f);
-                userSidebar.DOAnchorPos(Vector2.zero, 0.3f);
-                userPanelOpened = true;
-                return;
-            });   
-        }
-
-        else
-            CloseUserSidebar();
+        loadingText.text = text;
+        loadingPanel.SetActive(true);
+        loadingPanel.GetComponent<Animator>().Play("LoadingPanelOpen", -1, 0);
     }
 
-    private void CloseUserSidebar()
-    {
-        menuButton.GetComponent<Animator>().Play("Out", -1, 0);
-        userSidebar.GetComponent<CanvasGroup>().DOFade(0, 0.3f);
-        userSidebar.DOAnchorPos(new Vector2(-1140, 0), 0.3f);
-        userPanelOpened = false;    
-    }
+    public void CloseLoadingPanel() => loadingPanel.SetActive(false);
 
-    public void HomeButton_OnClick()
-    {
-        ButtonClickSound();
-        CloseUserSidebar();
+    public void SetPanelInFront(GameObject panel) => panel.GetComponent<RectTransform>().SetAsLastSibling();
 
-        registerPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-        registerPanel.gameObject.SetActive(false);
+    public void ButtonClickSound() => SoundManager.instance.playSound(SoundManager.instance.buttonClick1);
 
-        loginPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-        loginPanel.gameObject.SetActive(false);
-    }
-
-    public void UserSidebarLogin_OnClick()
-    {
-        ButtonClickSound();
-        CloseUserSidebar();
-
-        registerPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-        registerPanel.gameObject.SetActive(false);
-
-        loginPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-        loginPanel.gameObject.SetActive(true);
-        loginPanel.GetComponent<CanvasGroup>().DOFade(1, 0.2f);
-    }
-
-    public void UserSidebarRegister_OnClick()
-    {
-        ButtonClickSound();
-        CloseUserSidebar();
-
-        loginPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-        loginPanel.gameObject.SetActive(false);
-
-        registerPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-        registerPanel.gameObject.SetActive(true);
-        registerPanel.GetComponent<CanvasGroup>().DOFade(1, 0.2f);
-    }
-
-    public void LoginPanelLogin_OnClick()
-    {
-        ButtonClickSound();
-    
-        userPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-        userPanel.gameObject.SetActive(true);
-        userPanel.GetComponent<CanvasGroup>().DOFade(1, 0.4f).OnComplete(delegate(){
-            
-            registerPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-            registerPanel.gameObject.SetActive(false);
-
-            loginPanel.GetComponent<CanvasGroup>().DOFade(0, 0);
-            loginPanel.gameObject.SetActive(false);
-        });
-    }
-
-    public void ButtonClickSound()
-    {
-        SoundManager.instance.playSound(SoundManager.instance.buttonClick1);
-    }
 }

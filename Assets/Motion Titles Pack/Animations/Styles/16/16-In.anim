@@ -688,9 +688,9 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.8333333
-    functionName: PlaySwooshSound
+    functionName: playSound
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 8300000, guid: 9ef9ae1d5ac69624da60fe3b3d4af814, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

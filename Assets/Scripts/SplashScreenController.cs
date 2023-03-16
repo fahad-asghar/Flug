@@ -8,28 +8,13 @@ public class SplashScreenController : MonoBehaviour
     [SerializeField] private GameObject logoObject;
     [SerializeField] private GameObject tagObject;
 
-    private void Awake()
-    {
-        instance = this;
-    }
+    private void Awake() => instance = this;
 
-    private void Start()
-    {
-        Invoke("Delay", 1);
-    }
+    private void Start() => Invoke("Delay", 1);
 
-    private void Delay()
-    {
-        logoObject.SetActive(true);
-    }
+    private void Delay() => logoObject.SetActive(true);
 
-    public void EnableTag()
-    {
-        tagObject.SetActive(true);
-    }
+    public void EnableTag() => tagObject.SetActive(true);
 
-    public void OpenMainScene()
-    {
-        SceneManager.LoadScene("Main");
-    }
+    public void OpenMainScene() => SceneManager.LoadScene("Main");
 }

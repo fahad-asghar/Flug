@@ -2,18 +2,9 @@ using UnityEngine;
 
 public class AnimationEvents : MonoBehaviour
 {
-    private void OnLogoAnimationCompleted()
-    {
-        SplashScreenController.instance.EnableTag();
-    }
+    private void OnLogoAnimationCompleted() => SplashScreenController.instance.EnableTag();
 
-    private void OnTagAnimationCompleted()
-    {
-        SplashScreenController.instance.OpenMainScene();
-    }
+    private void OnTagAnimationCompleted() => SplashScreenController.instance.OpenMainScene();
 
-    private void PlaySwooshSound()
-    {
-        SoundManager.instance.playSound(SoundManager.instance.swoosh, 0.5f);
-    }
+    private void playSound(AudioClip clip) => SoundManager.instance.playSound(clip, 0.5f);
 }
